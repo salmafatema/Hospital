@@ -1,8 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const Patient = require('../models/Patient'); // Corrected import for the Patient model
-const patientsRoutes = require('./routes/patients'); // Import the routes
+require('dotenv').config();
+
 
 mongoose.connect('mongodb://localhost:27017/hospital_db', {
     useNewUrlParser: true,

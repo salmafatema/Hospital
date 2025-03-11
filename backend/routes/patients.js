@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Patient = require('./models/Patient'); // Ensure this path is correct
+const Patient = require('../models/patient'); // Correct path to the Patient model with the correct casing
 
 
 // Get all patients
