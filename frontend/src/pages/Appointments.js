@@ -1,251 +1,153 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-function Appointments() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [showModal, setShowModal] = useState(false);
-  const [formData, setFormData] = useState({
+const Appointments = () => {
+  const [appointments, setAppointments] = useState([]);
+  const [newAppointment, setNewAppointment] = useState({
     patientName: '',
     doctorName: '',
     department: '',
     date: '',
     time: '',
-    type: '',
-    status: 'Scheduled'
   });
-  
-  // Sample appointment data
-  const tableData = [
-    { 
-      id: "APT-001",
-      patientName: "John Smith",
-      doctorName: "Dr. Sarah Johnson", 
-      department: "Cardiology",
-      date: "2024-03-25",
-      time: "09:00 AM",
-      type: "Follow-up",
-      status: "Scheduled"
-    },
-    { 
-      id: "APT-002",
-      patientName: "Emma Davis",
-      doctorName: "Dr. Michael Chen",
-      department: "Neurology",
-      date: "2024-03-25",
-      time: "10:30 AM",
-      type: "Consultation",
-      status: "Completed"
-    },
-    { 
-      id: "APT-003",
-      patientName: "Robert Wilson",
-      doctorName: "Dr. Emily Rodriguez",
-      department: "Pediatrics",
-      date: "2024-03-26",
-      time: "02:00 PM",
-      type: "Initial Visit",
-      status: "Scheduled"
-    },
-  ];
+  const [isFormVisible, setFormVisible] = useState(false);
 
-  // Filter data based on search term
-  const filteredData = tableData.filter(item =>
-    Object.values(item).some(value =>
-      value.toString().toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
+  useEffect(() => {
+    fetchAppointments();
+  }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Here you would typically make an API call to save the appointment
-    console.log('Form submitted:', formData);
-    setShowModal(false);
-    setFormData({
-      patientName: '',
-      doctorName: '',
-      department: '',
-      date: '',
-      time: '',
-      type: '',
-      status: 'Scheduled'
-    });
+  const fetchAppointments = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/appointments');
+      setAppointments(response.data);
+    } catch (error) {
+      console.error('Error fetching appointments:', error);
+    }
   };
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'Scheduled':
-        return 'bg-blue-100 text-blue-800';
-      case 'Completed':
-        return 'bg-green-100 text-green-800';
-      case 'Cancelled':
-        return 'bg-red-100 text-red-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewAppointment((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      await axios.post('http://localhost:5000/appointments', newAppointment);
+      fetchAppointments();
+      setNewAppointment({
+        patientName: '',
+        doctorName: '',
+        department: '',
+        date: '',
+        time: '',
+      });
+      setFormVisible(false);
+    } catch (error) {
+      console.error('Error adding appointment:', error);
     }
   };
 
   return (
-    <div className="ml-64 p-4 mt-16">
-      {/* Search Bar and Add Button */}
-      <div className="mb-4 flex justify-between items-center">
-        <div className='w-1/2'>
-          <input
-            type="text"
-            placeholder="Search appointments..."
-            className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-        <div>
-          <button 
-            className="bg-black text-white px-4 py-2 rounded-lg"
-            onClick={() => setShowModal(true)}
-          >
-            Add Appointment
-          </button>
-        </div>
-      </div>
+    <div className="container mx-auto p-6 max-w-5xl bg-white shadow-lg rounded-lg">
+      <h1 className="text-3xl font-bold text-center mb-8 text-blue-600">Appointments Management</h1>
 
-      {/* Appointments Table */}
-      <div className="bg-white shadow-md rounded-lg overflow-hidden">
-        <table className="min-w-full">
-          <thead className="bg-black">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Appointment ID</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Patient Name</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Doctor</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Department</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Date</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Time</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Type</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Status</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {filteredData.map((item, index) => (
-              <tr key={index} className="hover:bg-gray-50">
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.id}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.patientName}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.doctorName}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.department}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.date}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.time}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.type}</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(item.status)}`}>
-                    {item.status}
-                  </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <button
+        onClick={() => setFormVisible(!isFormVisible)}
+        className="bg-blue-600 text-white p-3 rounded-md hover:bg-blue-700 mb-6 w-full"
+      >
+        {isFormVisible ? 'Close Form' : 'Add New Appointment'}
+      </button>
 
-      {/* Add Appointment Modal */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white p-8 w-[90vw] max-w-2xl rounded-xl shadow-2xl transform transition-all">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-semibold text-gray-800">Add New Appointment</h2>
-              <button 
-                onClick={() => setShowModal(false)}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            <form onSubmit={handleSubmit}>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Patient Name</label>
-                  <input
-                    type="text"
-                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition-colors"
-                    value={formData.patientName}
-                    onChange={(e) => setFormData({...formData, patientName: e.target.value})}
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Doctor Name</label>
-                  <input
-                    type="text"
-                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition-colors"
-                    value={formData.doctorName}
-                    onChange={(e) => setFormData({...formData, doctorName: e.target.value})}
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Department</label>
-                  <input
-                    type="text"
-                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition-colors"
-                    value={formData.department}
-                    onChange={(e) => setFormData({...formData, department: e.target.value})}
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
-                  <input
-                    type="date"
-                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition-colors"
-                    value={formData.date}
-                    onChange={(e) => setFormData({...formData, date: e.target.value})}
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Time</label>
-                  <input
-                    type="time"
-                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition-colors"
-                    value={formData.time}
-                    onChange={(e) => setFormData({...formData, time: e.target.value})}
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
-                  <select
-                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition-colors"
-                    value={formData.type}
-                    onChange={(e) => setFormData({...formData, type: e.target.value})}
-                    required
-                  >
-                    <option value="">Select Type</option>
-                    <option value="Initial Visit">Initial Visit</option>
-                    <option value="Follow-up">Follow-up</option>
-                    <option value="Consultation">Consultation</option>
-                    <option value="Emergency">Emergency</option>
-                  </select>
-                </div>
-              </div>
-              <div className="mt-6 flex justify-end gap-4">
-                <button
-                  type="button"
-                  onClick={() => setShowModal(false)}
-                  className="px-4 py-2 text-gray-700 hover:text-gray-900 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
-                >
-                  Save Appointment
-                </button>
-              </div>
-            </form>
-          </div>
+      {isFormVisible && (
+        <div className="bg-gray-100 p-6 rounded-md shadow-md mb-8 max-w-3xl mx-auto">
+          <h2 className="text-xl font-semibold mb-4">Add New Appointment</h2>
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4">
+            <input
+              type="text"
+              name="patientName"
+              placeholder="Patient Name"
+              value={newAppointment.patientName}
+              onChange={handleInputChange}
+              required
+              className="w-full p-3 border rounded-md"
+            />
+            <input
+              type="text"
+              name="doctorName"
+              placeholder="Doctor Name"
+              value={newAppointment.doctorName}
+              onChange={handleInputChange}
+              required
+              className="w-full p-3 border rounded-md"
+            />
+            <input
+              type="text"
+              name="department"
+              placeholder="Department"
+              value={newAppointment.department}
+              onChange={handleInputChange}
+              required
+              className="w-full p-3 border rounded-md"
+            />
+            <input
+              type="date"
+              name="date"
+              value={newAppointment.date}
+              onChange={handleInputChange}
+              required
+              className="w-full p-3 border rounded-md"
+            />
+            <input
+              type="time"
+              name="time"
+              value={newAppointment.time}
+              onChange={handleInputChange}
+              required
+              className="w-full p-3 border rounded-md"
+            />
+            <button
+              type="submit"
+              className="bg-blue-600 text-white p-3 rounded-md hover:bg-blue-700 w-full"
+            >
+              Add Appointment
+            </button>
+          </form>
         </div>
       )}
+
+      <div className="mt-8">
+        <h2 className="text-xl font-semibold mb-4">Appointment List</h2>
+        <div className="overflow-x-auto">
+          <table className="table-auto w-full border-collapse border border-gray-300 shadow-md">
+            <thead className="bg-blue-500 text-white">
+              <tr>
+                <th className="px-4 py-2">#</th>
+                <th className="px-4 py-2">Patient Name</th>
+                <th className="px-4 py-2">Doctor</th>
+                <th className="px-4 py-2">Department</th>
+                <th className="px-4 py-2">Date</th>
+                <th className="px-4 py-2">Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {appointments.map((appointment, index) => (
+                <tr key={appointment._id} className="border-b hover:bg-gray-100">
+                  <td className="px-4 py-2">{index + 1}</td>
+                  <td className="px-4 py-2">{appointment.patientName}</td>
+                  <td className="px-4 py-2">{appointment.doctorName}</td>
+                  <td className="px-4 py-2">{appointment.department}</td>
+                  <td className="px-4 py-2">{new Date(appointment.date).toLocaleDateString()}</td>
+                  <td className="px-4 py-2">{appointment.time}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
-}
+};
 
 export default Appointments;

@@ -4,12 +4,13 @@ const appointmentSchema = new mongoose.Schema({
     appointmentId: {
         type: Number,
         required: true,
+        unique: true
     },
     patientName: {
         type: String,
         required: true,
     },
-    doctor: {
+    doctorName: {        // Changed to match frontend data
         type: String,
         required: true,
     },
@@ -22,15 +23,9 @@ const appointmentSchema = new mongoose.Schema({
         required: true,
     },
     time: {
-        type: Number,
+        type: String,  // Changed from Number to String
         required: true,
     },
-    type: {
-        type: String,
-        required: true,
-    },
-    status: {
-        type: String,
-        required: true,
-    }
-})
+}, { timestamps: true });
+
+module.exports = mongoose.model('Appointment', appointmentSchema);

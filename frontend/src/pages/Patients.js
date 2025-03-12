@@ -19,26 +19,26 @@ const Patients = () => {
     fetchPatients();
   }, []);
 
-    const fetchPatients = async () => {
-        console.log('Fetching patients...'); 
+  const fetchPatients = async () => {
+    console.log('Fetching patients...');
 
     try {
-        const response = await axios.get('http://localhost:5000/patients');
-        console.log('Response from backend:', response.data); 
+      const response = await axios.get('http://localhost:5000/patients');
+      console.log('Response from backend:', response.data);
 
 
-        if (Array.isArray(response.data)) {
-            setPatients(response.data);
-        } else if (Array.isArray(response.data.patients)) {
-            setPatients(response.data.patients); 
-        } else {
-            setPatients([]); 
-        }
-    } catch (error) {
-        console.error('Error fetching patients:', error);
+      if (Array.isArray(response.data)) {
+        setPatients(response.data);
+      } else if (Array.isArray(response.data.patients)) {
+        setPatients(response.data.patients);
+      } else {
         setPatients([]);
+      }
+    } catch (error) {
+      console.error('Error fetching patients:', error);
+      setPatients([]);
     }
-};
+  };
 
 
   const handleInputChange = (e) => {
@@ -48,14 +48,14 @@ const Patients = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    console.log('Patient data to be added:', newPatient);  
-  
+
+    console.log('Patient data to be added:', newPatient);
+
     try {
       const response = await axios.post('http://localhost:5000/patients', newPatient);
-      console.log('Patient added:', response.data);  
-  
-      fetchPatients();  
+      console.log('Patient added:', response.data);
+
+      fetchPatients();
       setNewPatient({
         fullName: '',
         age: '',
@@ -66,12 +66,12 @@ const Patients = () => {
         time: '',
         date: '',
       });
-      setFormVisible(false);  
+      setFormVisible(false);
     } catch (error) {
       console.error('Error adding patient:', error);
     }
   };
-  
+
 
   return (
     <div className="container mx-auto p-4 max-w-4xl">
@@ -79,7 +79,7 @@ const Patients = () => {
 
       <button
         onClick={() => setFormVisible(!isFormVisible)}
-        className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 mb-6"
+        className="bg-black text-white p-2 rounded-md hover:bg-gray-600 mb-6"
       >
         {isFormVisible ? 'Close Form' : 'Add New Patient'}
       </button>
@@ -110,8 +110,9 @@ const Patients = () => {
                 className="w-full p-3 border rounded-md"
               />
             </div>
+
             <div className="mb-4">
-              <input
+              <select
                 type="text"
                 name="gender"
                 placeholder="Gender"
@@ -119,8 +120,13 @@ const Patients = () => {
                 onChange={handleInputChange}
                 required
                 className="w-full p-3 border rounded-md"
-              />
+              >
+                <option value="Other">Other</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
             </div>
+
             <div className="mb-4">
               <input
                 type="text"
@@ -184,7 +190,7 @@ const Patients = () => {
                 className="w-full p-3 border rounded-md"
               />
             </div>
-            <button type="submit" className="bg-green-500 text-white p-3 rounded-md hover:bg-green-600">
+            <button type="submit" className="bg-black text-white p-3 rounded-md hover:bg-gray-600">
               Add Patient
             </button>
           </form>

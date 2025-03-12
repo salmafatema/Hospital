@@ -35,4 +35,3 @@ app.get('/patients', async (req, res) => {
   }
 });
 
-
