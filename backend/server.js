@@ -47,7 +47,12 @@ app.get('/patients', async (req, res) => {
     }
 });
 
+const appointmentRoutes = require('./routes/AppointmentRoute'); // Import appointment routes
+
+app.use(appointmentRoutes); // Use appointment routes
+
 // Server Start
+
 
 app.listen(5000, () => {
     console.log('Server is running on port 5000');

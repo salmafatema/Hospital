@@ -14,7 +14,7 @@ const Sidebar = () => {
             <nav className="fixed left-0 top-0 h-screen w-64 bg-white shadow-lg">
                 <div className="flex h-full flex-col">
                     <div className="p-4">
-                        <Link to="/" className='text-2xl font-bold'>
+                        <Link to="/" >
                             <h1>HMS</h1>
                         </Link>
                     </div>

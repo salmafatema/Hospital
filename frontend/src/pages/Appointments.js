@@ -32,7 +32,6 @@ const Appointments = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       await axios.post('http://localhost:5000/appointments', newAppointment);
       fetchAppointments();
@@ -50,67 +49,76 @@ const Appointments = () => {
   };
 
   return (
-    <div className="container mx-auto p-6 max-w-5xl bg-white shadow-lg rounded-lg">
-      <h1 className="text-3xl font-bold text-center mb-8 text-blue-600">Appointments Management</h1>
+    <div className="container mx-auto p-4 max-w-4xl">
+      <h1 className="text-3xl font-bold text-center mt-20">Appointments Management</h1>
 
-      <button
-        onClick={() => setFormVisible(!isFormVisible)}
-        className="bg-blue-600 text-white p-3 rounded-md hover:bg-blue-700 mb-6 w-full"
-      >
-        {isFormVisible ? 'Close Form' : 'Add New Appointment'}
-      </button>
+      <div className="flex justify-center my-6">
+        <button
+          onClick={() => setFormVisible(!isFormVisible)}
+          className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-600"
+        >
+          {isFormVisible ? 'Close Form' : 'Add New Appointment'}
+        </button>
+      </div>
 
       {isFormVisible && (
-        <div className="bg-gray-100 p-6 rounded-md shadow-md mb-8 max-w-3xl mx-auto">
+        <div className="bg-white p-6 rounded-lg shadow-md max-w-2xl mx-auto">
           <h2 className="text-xl font-semibold mb-4">Add New Appointment</h2>
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4">
-            <input
-              type="text"
-              name="patientName"
-              placeholder="Patient Name"
-              value={newAppointment.patientName}
-              onChange={handleInputChange}
-              required
-              className="w-full p-3 border rounded-md"
-            />
-            <input
-              type="text"
-              name="doctorName"
-              placeholder="Doctor Name"
-              value={newAppointment.doctorName}
-              onChange={handleInputChange}
-              required
-              className="w-full p-3 border rounded-md"
-            />
-            <input
-              type="text"
-              name="department"
-              placeholder="Department"
-              value={newAppointment.department}
-              onChange={handleInputChange}
-              required
-              className="w-full p-3 border rounded-md"
-            />
-            <input
-              type="date"
-              name="date"
-              value={newAppointment.date}
-              onChange={handleInputChange}
-              required
-              className="w-full p-3 border rounded-md"
-            />
-            <input
-              type="time"
-              name="time"
-              value={newAppointment.time}
-              onChange={handleInputChange}
-              required
-              className="w-full p-3 border rounded-md"
-            />
-            <button
-              type="submit"
-              className="bg-blue-600 text-white p-3 rounded-md hover:bg-blue-700 w-full"
-            >
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <input
+                type="text"
+                name="patientName"
+                placeholder="Patient Name"
+                value={newAppointment.patientName}
+                onChange={handleInputChange}
+                required
+                className="w-full p-3 border rounded-md"
+              />
+            </div>
+            <div className="mb-4">
+              <input
+                type="text"
+                name="doctorName"
+                placeholder="Doctor Name"
+                value={newAppointment.doctorName}
+                onChange={handleInputChange}
+                required
+                className="w-full p-3 border rounded-md"
+              />
+            </div>
+            <div className="mb-4">
+              <input
+                type="text"
+                name="department"
+                placeholder="Department"
+                value={newAppointment.department}
+                onChange={handleInputChange}
+                required
+                className="w-full p-3 border rounded-md"
+              />
+            </div>
+            <div className="mb-4">
+              <input
+                type="date"
+                name="date"
+                value={newAppointment.date}
+                onChange={handleInputChange}
+                required
+                className="w-full p-3 border rounded-md"
+              />
+            </div>
+            <div className="mb-4">
+              <input
+                type="time"
+                name="time"
+                value={newAppointment.time}
+                onChange={handleInputChange}
+                required
+                className="w-full p-3 border rounded-md"
+              />
+            </div>
+            <button type="submit" className="bg-black text-white p-3 rounded-md hover:bg-gray-600 w-full">
               Add Appointment
             </button>
           </form>
@@ -119,32 +127,28 @@ const Appointments = () => {
 
       <div className="mt-8">
         <h2 className="text-xl font-semibold mb-4">Appointment List</h2>
-        <div className="overflow-x-auto">
-          <table className="table-auto w-full border-collapse border border-gray-300 shadow-md">
-            <thead className="bg-blue-500 text-white">
-              <tr>
-                <th className="px-4 py-2">#</th>
-                <th className="px-4 py-2">Patient Name</th>
-                <th className="px-4 py-2">Doctor</th>
-                <th className="px-4 py-2">Department</th>
-                <th className="px-4 py-2">Date</th>
-                <th className="px-4 py-2">Time</th>
+        <table className="table-auto w-full border-collapse border border-gray-300 shadow-md">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="px-4 py-2 text-left">Patient Name</th>
+              <th className="px-4 py-2 text-left">Doctor</th>
+              <th className="px-4 py-2 text-left">Department</th>
+              <th className="px-4 py-2 text-left">Date</th>
+              <th className="px-4 py-2 text-left">Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {appointments.map((appointment) => (
+              <tr key={appointment._id} className="border-b">
+                <td className="px-4 py-2">{appointment.patientName}</td>
+                <td className="px-4 py-2">{appointment.doctorName}</td>
+                <td className="px-4 py-2">{appointment.department}</td>
+                <td className="px-4 py-2">{new Date(appointment.date).toLocaleDateString()}</td>
+                <td className="px-4 py-2">{appointment.time}</td>
               </tr>
-            </thead>
-            <tbody>
-              {appointments.map((appointment, index) => (
-                <tr key={appointment._id} className="border-b hover:bg-gray-100">
-                  <td className="px-4 py-2">{index + 1}</td>
-                  <td className="px-4 py-2">{appointment.patientName}</td>
-                  <td className="px-4 py-2">{appointment.doctorName}</td>
-                  <td className="px-4 py-2">{appointment.department}</td>
-                  <td className="px-4 py-2">{new Date(appointment.date).toLocaleDateString()}</td>
-                  <td className="px-4 py-2">{appointment.time}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
