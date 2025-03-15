@@ -10,7 +10,7 @@ const appointmentSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    doctorName: {        // Changed to match frontend data
+    doctorName: {
         type: String,
         required: true,
     },
@@ -23,9 +23,14 @@ const appointmentSchema = new mongoose.Schema({
         required: true,
     },
     time: {
-        type: String,  // Changed from Number to String
+        type: String,
         required: true,
     },
+    status: {
+        type: String,
+        enum: ['Pending', 'Confirmed', 'Cancelled'],  // Enum for limited status options
+        default: 'Pending'                             // Default value as 'Pending'
+    }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Appointment', appointmentSchema);

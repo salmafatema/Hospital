@@ -182,7 +182,7 @@ function Reports() {
   };
 
   return (
-    <div className="ml-64 p-8 mt-16">
+    <div className="p-4 md:ml-64 mt-16">
       <div className="mb-8 flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-gray-800 mb-2">Hospital Patient Reports</h1>
@@ -208,7 +208,7 @@ function Reports() {
       </div>
 
       {/* Stats Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
         <div className="bg-pink-50 border-1 border-pink-300 p-8 rounded-lg shadow-sm border border-gray-200">
           <h3 className="text-gray-500 text-sm">Total Patients</h3>
           <p className="text-2xl font-semibold">{tableData.length}</p>
@@ -228,7 +228,7 @@ function Reports() {
       </div>
 
       {/* Trends Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h3 className="text-lg font-semibold mb-4">Patients by Department</h3>
           <Line data={departmentChartData} />
@@ -249,65 +249,63 @@ function Reports() {
           <p className="text-gray-400">Try adjusting your search terms</p>
         </div>
       ) : (
-        <div className="bg-white shadow-md rounded-lg overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="min-w-full">
-              <thead className="bg-black">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-gray-200"
-                      onClick={() => requestSort('patientId')}>
-                    Patient ID {getSortIcon('patientId')}
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-gray-200"
-                      onClick={() => requestSort('patientName')}>
-                    Patient Name {getSortIcon('patientName')}
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-gray-200"
-                      onClick={() => requestSort('age')}>
-                    Age {getSortIcon('age')}
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-gray-200"
-                      onClick={() => requestSort('diagnosis')}>
-                    Diagnosis {getSortIcon('diagnosis')}
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-gray-200"
-                      onClick={() => requestSort('doctor')}>
-                    Doctor {getSortIcon('doctor')}
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-gray-200"
-                      onClick={() => requestSort('department')}>
-                    Department {getSortIcon('department')}
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-gray-200"
-                      onClick={() => requestSort('admissionDate')}>
-                    Admission Date {getSortIcon('admissionDate')}
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-gray-200"
-                      onClick={() => requestSort('status')}>
-                    Status {getSortIcon('status')}
-                  </th>
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white shadow-md rounded-lg">
+            <thead className="bg-black">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-gray-200"
+                    onClick={() => requestSort('patientId')}>
+                  Patient ID {getSortIcon('patientId')}
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-gray-200"
+                    onClick={() => requestSort('patientName')}>
+                  Patient Name {getSortIcon('patientName')}
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-gray-200"
+                    onClick={() => requestSort('age')}>
+                  Age {getSortIcon('age')}
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-gray-200"
+                    onClick={() => requestSort('diagnosis')}>
+                  Diagnosis {getSortIcon('diagnosis')}
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-gray-200"
+                    onClick={() => requestSort('doctor')}>
+                  Doctor {getSortIcon('doctor')}
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-gray-200"
+                    onClick={() => requestSort('department')}>
+                  Department {getSortIcon('department')}
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-gray-200"
+                    onClick={() => requestSort('admissionDate')}>
+                  Admission Date {getSortIcon('admissionDate')}
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-gray-200"
+                    onClick={() => requestSort('status')}>
+                  Status {getSortIcon('status')}
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {sortedData.map((item, index) => (
+                <tr key={index} className="hover:bg-gray-50 transition-colors duration-200">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">{item.patientId}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.patientName}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.age}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.diagnosis}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.doctor}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.department}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.admissionDate}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(item.status)}`}>
+                      {item.status}
+                    </span>
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {sortedData.map((item, index) => (
-                  <tr key={index} className="hover:bg-gray-50 transition-colors duration-200">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">{item.patientId}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.patientName}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.age}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.diagnosis}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.doctor}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.department}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.admissionDate}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(item.status)}`}>
-                        {item.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>

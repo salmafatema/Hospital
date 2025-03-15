@@ -4,11 +4,12 @@ const AppointmentModel = require('../models/AppointmentModel');
 
 // POST request for creating a new appointment
 router.post('/appointments', async (req, res) => {
-    const { appointmentId, patientName, doctorName, department, date, time } = req.body;
+    const { appointmentId, patientName, doctorName, department, date, time, status } = req.body;
 
-    if (!patientName || !doctorName || !department || !date || !time) {
+    if (!patientName || !doctorName || !department || !date || !time || !status) {
         return res.status(400).json({ error: 'All fields are required' });
     }
+console.log(req.body);
 
     try {
         const newAppointment = new AppointmentModel({
@@ -17,7 +18,8 @@ router.post('/appointments', async (req, res) => {
             doctorName,
             department,
             date,
-            time
+            time,
+            status,
         });
 
         await newAppointment.save();

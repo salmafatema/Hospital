@@ -47,9 +47,9 @@ function DoctorsStaff() {
   );
 
   return (
-    <div className="ml-64 p-4 mt-16">
+    <div className="p-4 md:ml-64 mt-16">
       {/* Search Bar */}
-      <div className="mb-4">
+      <div className="mb-4 w-full">
         <input
           type="text"
           placeholder="Search staff..."
@@ -59,38 +59,41 @@ function DoctorsStaff() {
         />
       </div>
 
-      <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
-        <thead className="bg-black">
-          <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Name</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Specialty</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Department</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Contact</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Availability</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Assignments</th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-gray-200">
-          {filteredData.map((item, index) => (
-            <tr key={index} className="hover:bg-gray-50">
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.name}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.specialty}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.department}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.contact}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                <span className="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                  {item.availability}
-                </span>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                <span className="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
-                  {item.assignments}
-                </span>
-              </td>
+      {/* Responsive Table Container */}
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white shadow-md rounded-lg">
+          <thead className="bg-black">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Name</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Specialty</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Department</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Contact</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Availability</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Assignments</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="divide-y divide-gray-200">
+            {filteredData.map((item, index) => (
+              <tr key={index} className="hover:bg-gray-50">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.name}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.specialty}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.department}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.contact}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <span className="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                    {item.availability}
+                  </span>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <span className="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                    {item.assignments}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }

@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FaHome, FaUser, FaCalendar, FaUserMd, FaFileInvoiceDollar, FaPills, FaMicroscope, FaHospital, FaFileAlt, FaSignInAlt, FaUserPlus } from 'react-icons/fa';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 
 const Sidebar = () => {
     const location = useLocation();
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const isActive = (path) => {
         return location.pathname === path;
@@ -11,7 +12,17 @@ const Sidebar = () => {
 
     return (
         <>
-            <nav className="fixed left-0 top-0 h-screen w-64 bg-white shadow-lg">
+            {/* Mobile Menu Button */}
+            <button 
+                className="fixed top-4 left-4 z-50 md:hidden bg-black text-white p-2 rounded-lg"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+                {isMobileMenuOpen ? '✕' : '☰'}
+            </button>
+
+            <nav className={`fixed left-0 top-0 h-screen bg-white shadow-lg transition-transform duration-300 ease-in-out ${
+                isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+            } md:translate-x-0 w-64 z-40`}>
                 <div className="flex h-full flex-col">
                     <div className="p-4">
                         <Link to="/" >

@@ -6,10 +6,9 @@ const Topbar = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     return (
-        <div>
-            
-            <div className="fixed top-0 right-0 w-[calc(100%-16rem)] bg-white p-4 flex items-center justify-between">
-                <h1 className='text-2xl font-bold'>
+        <div className="fixed top-0 right-0 w-full md:w-[calc(100%-16rem)] bg-white p-4 z-30">
+            <div className="flex items-center justify-between">
+                <h1 className='text-xl md:text-2xl font-bold ml-12 md:ml-0'>
                     Hospital Management System
                 </h1>
                 <div className="relative">

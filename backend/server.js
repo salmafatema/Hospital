@@ -51,6 +51,7 @@ const appointmentRoutes = require('./routes/AppointmentRoute'); // Import appoin
 
 app.use(appointmentRoutes); // Use appointment routes
 
+
 // Server Start
 
 

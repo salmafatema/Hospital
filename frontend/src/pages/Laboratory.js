@@ -74,7 +74,7 @@ function Laboratory() {
   };
 
   return (
-    <div className="ml-64 p-4 mt-16">
+    <div className="p-4 md:ml-64 mt-16">
       {/* Search Bar */}
       <div className="mb-4">
         <input
@@ -86,49 +86,51 @@ function Laboratory() {
         />
       </div>
 
-      <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
-        <thead className="bg-black">
-          <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Test Name</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Patient Name</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Test Date</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Status</th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Actions</th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-gray-200">
-          {filteredData.map((item, index) => (
-            <tr key={index} className="hover:bg-gray-50">
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.testName}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.patientName}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.testDate}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm">
-                <span className={`px-2 py-1 rounded-full text-xs font-semibold
-                  ${item.status === 'Completed' ? 'bg-green-100 text-green-800' : 
-                    item.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : 
-                    'bg-blue-100 text-blue-800'}`}>
-                  {item.status}
-                </span>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm">
-                {item.status === 'Completed' && (
-                  <button
-                    onClick={() => handleViewResults(item)}
-                    className="text-blue-600 hover:text-blue-900"
-                  >
-                    View Results
-                  </button>
-                )}
-              </td>
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white shadow-md rounded-lg">
+          <thead className="bg-black">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Test Name</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Patient Name</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Test Date</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Status</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="divide-y divide-gray-200">
+            {filteredData.map((item, index) => (
+              <tr key={index} className="hover:bg-gray-50">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.testName}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.patientName}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.testDate}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  <span className={`px-2 py-1 rounded-full text-xs font-semibold
+                    ${item.status === 'Completed' ? 'bg-green-100 text-green-800' : 
+                      item.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : 
+                      'bg-blue-100 text-blue-800'}`}>
+                    {item.status}
+                  </span>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  {item.status === 'Completed' && (
+                    <button
+                      onClick={() => handleViewResults(item)}
+                      className="text-blue-600 hover:text-blue-900"
+                    >
+                      View Results
+                    </button>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-      {/* Results Modal */}
+      {/* Results Modal - Make it responsive */}
       {showModal && selectedTest && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg max-w-2xl w-full">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+          <div className="bg-white p-4 md:p-6 rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold">{selectedTest.testName} Results</h2>
               <button
