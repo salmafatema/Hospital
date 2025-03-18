@@ -12,11 +12,15 @@ const appointmentSchema = new mongoose.Schema({
     },
     doctorName: {
         type: String,
+        enum: ['Dr.Rajesh Sharma', 'Dr.Neha Verma', 'Dr.Manish Gupta', 'Dr.Sanjay Patel', 'Dr.Anisha Tiwari', 'Dr.Vinay Jain'],
+        default: 'Dr.Rajesh Sharma',
         required: true,
     },
     department: {
         type: String,
-        required: true,
+        enum: ['Cardiology', 'Orthopedics', 'Neurology', 'Pediatrics', 'Dermatology', 'General Medicine'],
+        default: 'General Medicine',
+        required: true
     },
     date: {
         type: Date,
@@ -28,8 +32,8 @@ const appointmentSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['Pending', 'Confirmed', 'Cancelled'],  // Enum for limited status options
-        default: 'Pending'                             // Default value as 'Pending'
+        enum: ['Pending', 'Confirmed', 'Cancelled'],  
+        default: 'Pending'                             
     }
 }, { timestamps: true });
 

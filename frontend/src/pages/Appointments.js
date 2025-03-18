@@ -5,8 +5,8 @@ const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
   const [newAppointment, setNewAppointment] = useState({
     patientName: '',
-    doctorName: '',
-    department: '',
+    doctorName: 'Dr.Rajesh Sharma',
+    department: 'General Medicine',
     date: '',
     time: '',
     status: 'Pending',
@@ -36,15 +36,15 @@ const Appointments = () => {
     e.preventDefault();
     try {
       // console.log(newAppointment);
-      
+
       await axios.post('http://localhost:5000/appointments', newAppointment);
       setSuccessMessage('Appointment added successfully! ✅');
 
       fetchAppointments();
       setNewAppointment({
         patientName: '',
-        doctorName: '',
-        department: '',
+        doctorName: 'Dr.Rajesh Sharma',
+        department: 'General Medicine',
         date: '',
         time: '',
         status: 'Pending',
@@ -59,21 +59,29 @@ const Appointments = () => {
 
   return (
     <div className="container mx-auto p-4 md:ml-64 mt-16">
-      <h1 className="text-3xl font-bold text-center mt-20">Appointments List</h1>
+      
 
       <div className="flex justify-center my-6">
         <button
           onClick={() => setFormVisible(true)}
-          className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-600"
+          className="bg-black text-white px-4 py-2 flex items-center gap-2 rounded-md hover:bg-gray-600"
         >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+          </svg>
           Add New Appointment
         </button>
       </div>
 
       {/* Success Message */}
       {successMessage && (
-        <div className="bg-green-500 text-white text-center p-3 rounded-md mb-4">
-          {successMessage}
+        <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-md mb-6 shadow-sm">
+          <div className="flex items-center">
+            <svg className="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
+            </svg>
+            {successMessage}
+          </div>
         </div>
       )}
 
@@ -94,28 +102,41 @@ const Appointments = () => {
                   className="w-full p-3 border rounded-md"
                 />
               </div>
+              {/* Doctor Name Field */}
               <div className="mb-4">
-                <input
-                  type="text"
+                <select
                   name="doctorName"
-                  placeholder="Doctor Name"
                   value={newAppointment.doctorName}
                   onChange={handleInputChange}
                   required
                   className="w-full p-3 border rounded-md"
-                />
+                >
+                  <option value="Dr.Rajesh Sharma">Dr. Rajesh Sharma</option>
+                  <option value="Dr.Neha Verma">Dr. Neha Verma</option>
+                  <option value="Dr.Manish Gupta">Dr. Manish Gupta</option>
+                  <option value="Dr.Sanjay Patel">Dr. Sanjay Patel</option>
+                  <option value="Dr.Anisha Tiwari">Dr. Anisha Tiwari</option>
+                  <option value="Dr.Vinay Jain">Dr. Vinay Jain</option>
+                </select>
               </div>
+              {/* Department Field */}
               <div className="mb-4">
-                <input
-                  type="text"
+                <select
                   name="department"
-                  placeholder="Department"
                   value={newAppointment.department}
                   onChange={handleInputChange}
                   required
                   className="w-full p-3 border rounded-md"
-                />
+                >
+                  <option value="Cardiology">Cardiology</option>
+                  <option value="Orthopedics">Orthopedics</option>
+                  <option value="Neurology">Neurology</option>
+                  <option value="Pediatrics">Pediatrics</option>
+                  <option value="Dermatology">Dermatology</option>
+                  <option value="General Medicine">General Medicine</option>
+                </select>
               </div>
+
               <div className="mb-4">
                 <input
                   type="date"
@@ -175,18 +196,18 @@ const Appointments = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-4 text-left ">Patient Name</th>
-                <th className="px-6 py-4 text-left ">Doctor</th>
-                <th className="px-6 py-4 text-left ">Department</th>
-                <th className="px-6 py-4 text-left ">Date</th>
-                <th className="px-6 py-4 text-left ">Time</th>
-                <th className="px-6 py-4 text-left ">Status</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-black uppercase tracking-wider">Patient Name</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-black uppercase tracking-wider">Doctor</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-black uppercase tracking-wider">Department</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-black uppercase tracking-wider">Date</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-black uppercase tracking-wider">Time</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-black uppercase tracking-wider">Status</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 bg-white">
               {appointments.map((appointment) => (
-                <tr 
-                  key={appointment._id} 
+                <tr
+                  key={appointment._id}
                   className="hover:bg-gray-50 transition-colors duration-200"
                 >
                   <td className="px-6 py-4  text-gray-900">{appointment.patientName}</td>
@@ -196,9 +217,9 @@ const Appointments = () => {
                   <td className="px-6 py-4  text-gray-900">{appointment.time}</td>
                   <td className="px-6 py-4 text-sm">
                     <span className={`inline-flex rounded-full px-2 py-1 text-xs font-semibold
-                      ${appointment.status === 'Confirmed' ? 'bg-green-100 text-green-800' : 
-                        appointment.status === 'Cancelled' ? 'bg-red-100 text-red-800' : 
-                        'bg-yellow-100 text-yellow-800'}`}>
+                      ${appointment.status === 'Confirmed' ? 'bg-green-100 text-green-800' :
+                        appointment.status === 'Cancelled' ? 'bg-red-100 text-red-800' :
+                          'bg-yellow-100 text-yellow-800'}`}>
                       {appointment.status}
                     </span>
                   </td>

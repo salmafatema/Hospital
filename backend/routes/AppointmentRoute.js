@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const AppointmentModel = require('../models/AppointmentModel');
 
-// POST request for creating a new appointment
+// POST 
 router.post('/appointments', async (req, res) => {
     const { appointmentId, patientName, doctorName, department, date, time, status } = req.body;
 
@@ -13,7 +13,7 @@ console.log(req.body);
 
     try {
         const newAppointment = new AppointmentModel({
-            appointmentId: Math.floor(Math.random() * 10000), // Auto-generate ID
+            appointmentId: Math.floor(Math.random() * 10000), 
             patientName,
             doctorName,
             department,
@@ -29,7 +29,7 @@ console.log(req.body);
     }
 });
 
-// GET request to fetch all appointments
+// GET 
 router.get('/appointments', async (req, res) => {
     try {
         const appointments = await AppointmentModel.find();
