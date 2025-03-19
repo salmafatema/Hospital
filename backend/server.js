@@ -25,7 +25,6 @@ mongoose.connect('mongodb://localhost:27017/Hospital', {
 
 
 
-
 app.use(appointmentRoutes); 
 app.use(patientRoutes);
 
