@@ -4,7 +4,7 @@ import './index.css';
 import Dashboard from "./pages/Dashboard";
 import Patients from "./pages/Patients";
 import Appointments from "./pages/Appointments";
-import DoctorsStaff from "./pages/DoctorsStaff";
+import Doctors from "./pages/Doctors";
 import BillingPayments from "./pages/BillingPayments";
 import Pharmacy from "./pages/Pharmacy";
 import Laboratory from "./pages/Laboratory";
@@ -19,7 +19,7 @@ export default function App() {
         <Route path="/*" element={<Dashboard />}>
         <Route path="patients" element={<Patients />} />
          <Route path="appointments" element={<Appointments />} />
-         <Route path="doctorsstaff" element={<DoctorsStaff />} />
+         <Route path="doctors" element={<Doctors />} />
          <Route path="billingpayments" element={<BillingPayments />} />
          <Route path="pharmacy" element={<Pharmacy />} />
          <Route path="laboratory" element={<Laboratory />} />

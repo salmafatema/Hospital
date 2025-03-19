@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const Patients = () => {
   const [patients, setPatients] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [newPatient, setNewPatient] = useState({
     fullName: '',
     age: '',
@@ -45,6 +46,12 @@ const Patients = () => {
     }
   };
 
+  // Add this new function to filter patients
+  const filteredPatients = patients.filter((patient) =>
+    patient.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    patient.phoneNumber.includes(searchQuery) ||
+    patient.admissionType.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -80,9 +87,8 @@ const Patients = () => {
 
   return (
     <div className="container mx-auto p-4 md:ml-64 mt-16">
-
-
-      <div className="flex justify-center my-6">
+      {/* Add search bar and button in a column layout */}
+      <div className="flex flex-col items-center gap-6 my-6">
         <button
           onClick={() => setFormVisible(true)}
           className="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition duration-300 ease-in-out flex items-center gap-2 shadow-md"
@@ -92,6 +98,29 @@ const Patients = () => {
           </svg>
           Add New Patient
         </button>
+        <div className="relative w-full max-w-4xl">
+          <input
+            type="text"
+            placeholder="Search patients..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+          />
+          <svg
+            className="absolute left-3 top-3.5 h-5 w-5 text-gray-400"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
+          </svg>
+        </div>
       </div>
 
       {/* Success Message */}
@@ -252,11 +281,12 @@ const Patients = () => {
                 <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Blood</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Time</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Date</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Action</th>
 
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {patients.map((patient) => (
+              {filteredPatients.map((patient) => (
                 <tr key={patient._id} className="hover:bg-gray-50 transition">
                   <td className="px-6 py-4 whitespace-nowrap">{patient.fullName}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{patient.age}</td>

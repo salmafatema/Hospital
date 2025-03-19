@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [newAppointment, setNewAppointment] = useState({
     patientName: '',
     doctorName: 'Dr.Rajesh Sharma',
@@ -40,7 +41,6 @@ const Appointments = () => {
     }
   };
 
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewAppointment((prev) => ({ ...prev, [name]: value }));
@@ -69,13 +69,14 @@ const Appointments = () => {
     }
   };
 
-
-
+  const filteredAppointments = appointments.filter((appointment) =>
+    appointment.patientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    appointment.doctorName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    appointment.department.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="container mx-auto p-4 md:ml-64 mt-16">
-
-
       <div className="flex justify-center my-6">
         <button
           onClick={() => setFormVisible(true)}
@@ -86,6 +87,33 @@ const Appointments = () => {
           </svg>
           Add New Appointment
         </button>
+      </div>
+
+      {/* Search bar modification */}
+      <div className="flex flex-col items-center gap-6 my-6">
+        <div className="relative w-full max-w-4xl">
+          <input
+            type="text"
+            placeholder="Search appointments..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+          />
+          <svg
+            className="absolute left-3 top-3.5 h-5 w-5 text-gray-400"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
+          </svg>
+        </div>
       </div>
 
       {/* Success Message */}
@@ -217,10 +245,11 @@ const Appointments = () => {
                 <th className="px-6 py-4 text-left text-xs font-medium text-black uppercase tracking-wider">Date</th>
                 <th className="px-6 py-4 text-left text-xs font-medium text-black uppercase tracking-wider">Time</th>
                 <th className="px-6 py-4 text-left text-xs font-medium text-black uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 bg-white">
-              {appointments.map((appointment) => (
+              {filteredAppointments.map((appointment) => (
                 <tr
                   key={appointment._id}
                   className="hover:bg-gray-50 transition-colors duration-200"
@@ -246,8 +275,6 @@ const Appointments = () => {
                       Delete
                     </button>
                   </td>
-
-
                 </tr>
               ))}
             </tbody>

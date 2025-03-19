@@ -106,15 +106,15 @@ const Sidebar = () => {
                             </li>
                             <li>
                                 <Link 
-                                    to="/doctorsstaff" 
+                                    to="/doctors" 
                                     className={`flex items-center rounded-lg p-2 transition-colors duration-200 ${
-                                        isActive('/doctorsstaff') 
+                                        isActive('/doctors') 
                                         ? 'bg-black text-white' 
                                         : 'text-gray-700 hover:bg-gray-100'
                                     }`}
                                 >
                                     <span className="mr-3"><FaUserMd /></span>
-                                    <span>Doctors & Staffs</span>
+                                    <span>Doctors</span>
                                 </Link>
                             </li>
                             <li>
