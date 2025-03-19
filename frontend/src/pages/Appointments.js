@@ -27,6 +27,20 @@ const Appointments = () => {
     }
   };
 
+  const deleteAppointment = async (id) => {
+    if (window.confirm('Are you sure you want to delete this patient?')) {
+      try {
+        await axios.delete(`http://localhost:5000/appointments/${id}`);
+        setSuccessMessage('Appointment deleted successfully! ❌');
+        fetchAppointments();  // Refresh data
+        setTimeout(() => setSuccessMessage(''), 3000);
+      } catch (error) {
+        console.error('Error deleting appointment:', error);
+      }
+    }
+  };
+
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewAppointment((prev) => ({ ...prev, [name]: value }));
@@ -35,8 +49,6 @@ const Appointments = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // console.log(newAppointment);
-
       await axios.post('http://localhost:5000/appointments', newAppointment);
       setSuccessMessage('Appointment added successfully! ✅');
 
@@ -57,9 +69,12 @@ const Appointments = () => {
     }
   };
 
+
+
+
   return (
     <div className="container mx-auto p-4 md:ml-64 mt-16">
-      
+
 
       <div className="flex justify-center my-6">
         <button
@@ -78,7 +93,7 @@ const Appointments = () => {
         <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-md mb-6 shadow-sm">
           <div className="flex items-center">
             <svg className="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
             </svg>
             {successMessage}
           </div>
@@ -87,7 +102,7 @@ const Appointments = () => {
 
       {/* Modal with Background Blur */}
       {isFormVisible && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center">
+        <div className="fixed inset-0 backdrop-blur-sm bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg w-full shadow-md max-w-2xl mx-auto">
             <h2 className="text-xl font-semibold mb-4">Add New Appointment</h2>
             <form onSubmit={handleSubmit}>
@@ -223,6 +238,16 @@ const Appointments = () => {
                       {appointment.status}
                     </span>
                   </td>
+                  <td className="px-6 py-4">
+                    <button
+                      onClick={() => deleteAppointment(appointment._id)}
+                      className="bg-black text-white px-3 py-1 rounded-md hover:bg-gray-700"
+                    >
+                      Delete
+                    </button>
+                  </td>
+
+
                 </tr>
               ))}
             </tbody>

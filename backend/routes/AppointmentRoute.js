@@ -9,11 +9,11 @@ router.post('/appointments', async (req, res) => {
     if (!patientName || !doctorName || !department || !date || !time || !status) {
         return res.status(400).json({ error: 'All fields are required' });
     }
-console.log(req.body);
+    console.log(req.body);
 
     try {
         const newAppointment = new AppointmentModel({
-            appointmentId: Math.floor(Math.random() * 10000), 
+            appointmentId: Math.floor(Math.random() * 10000),
             patientName,
             doctorName,
             department,
@@ -38,5 +38,25 @@ router.get('/appointments', async (req, res) => {
         res.status(500).json({ message: 'Error fetching appointments', error });
     }
 });
+
+// DELETE
+router.delete('/appointments/:id', async (req, res) => {
+    const { id } = req.params;
+    
+    try {
+        const deletedAppointment = await AppointmentModel.findByIdAndDelete(id);
+
+        if (!deletedAppointment) {
+            return res.status(404).json({ message: 'Appointment not found' });
+        }
+
+        res.status(200).json({ message: 'Appointment deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error deleting appointment', error });
+    }
+});
+
+
+
 
 module.exports = router;

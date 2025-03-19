@@ -27,9 +27,24 @@ const Patients = () => {
     } catch (error) {
       console.error('Error fetching patients:', error);
       setPatients([]);
-      
+
     }
   };
+
+  // delete function
+  const deletePatient = async (id) => {
+    if (window.confirm('Are you sure you want to delete this patient?')) {
+      try {
+        await axios.delete(`http://localhost:5000/patients/${id}`);
+        setSuccessMessage('Patient deleted successfully! ✅');
+        fetchPatients(); // Refresh patient list
+        setTimeout(() => setSuccessMessage(''), 3000);
+      } catch (error) {
+        console.error('Error deleting patient:', error);
+      }
+    }
+  };
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -65,7 +80,7 @@ const Patients = () => {
 
   return (
     <div className="container mx-auto p-4 md:ml-64 mt-16">
-      
+
 
       <div className="flex justify-center my-6">
         <button
@@ -84,7 +99,7 @@ const Patients = () => {
         <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-md mb-6 shadow-sm">
           <div className="flex items-center">
             <svg className="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
             </svg>
             {successMessage}
           </div>
@@ -237,7 +252,7 @@ const Patients = () => {
                 <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Blood</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Time</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Date</th>
-                
+
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -249,15 +264,24 @@ const Patients = () => {
                   <td className="px-6 py-4 whitespace-nowrap">{patient.phoneNumber}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                      ${patient.admissionType === 'Emergency' ? 'bg-red-100 text-red-800' : 
-                      patient.admissionType === 'Surgery' ? 'bg-yellow-100 text-yellow-800' : 
-                      'bg-green-100 text-green-800'}`}>
+                      ${patient.admissionType === 'Emergency' ? 'bg-red-100 text-red-800' :
+                        patient.admissionType === 'Surgery' ? 'bg-yellow-100 text-yellow-800' :
+                          'bg-green-100 text-green-800'}`}>
                       {patient.admissionType}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">{patient.bloodGroup}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{patient.time}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{new Date(patient.date).toLocaleDateString()}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <button
+                      onClick={() => deletePatient(patient._id)}
+                      className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-700 transition"
+                    >
+                      Delete
+                    </button>
+                  </td>
+
                 </tr>
               ))}
             </tbody>
