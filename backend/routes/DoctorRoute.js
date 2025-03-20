@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
-const Doctor = require('../models/DoctorModel');
+const DoctorModel = require('../models/DoctorModel');
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -34,14 +34,10 @@ const upload = multer({
 // GET all doctors
 router.get('/doctors', async (req, res) => {
     try {
-        const doctors = await Doctor.find();
+        const doctors = await DoctorModel.find();
         res.status(200).json(doctors);
     } catch (error) {
-        res.status(500).json({ 
-            success: false, 
-            message: 'Error fetching doctors', 
-            error: error.message 
-        });
+        res.status(500).json({ message: 'Error fetching doctors', error });
     }
 });
 
@@ -60,7 +56,7 @@ router.post('/doctors', upload.single('photo'), async (req, res) => {
             photo: req.file ? `/uploads/doctors/${req.file.filename}` : '/default-avatar.png'
         };
 
-        const doctor = new Doctor(doctorData);
+        const doctor = new DoctorModel(doctorData);
         const savedDoctor = await doctor.save();
         
         res.status(201).json({
@@ -80,7 +76,7 @@ router.post('/doctors', upload.single('photo'), async (req, res) => {
 // DELETE doctor
 router.delete('/doctors/:id', async (req, res) => {
     try {
-        const deletedDoctor = await Doctor.findByIdAndDelete(req.params.id);
+        const deletedDoctor = await DoctorModel.findByIdAndDelete(req.params.id);
         
         if (!deletedDoctor) {
             return res.status(404).json({

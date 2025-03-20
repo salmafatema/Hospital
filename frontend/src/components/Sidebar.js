@@ -119,15 +119,15 @@ const Sidebar = () => {
                             </li>
                             <li>
                                 <Link 
-                                    to="/billingpayments" 
+                                    to="/invoice" 
                                     className={`flex items-center rounded-lg p-2 transition-colors duration-200 ${
-                                        isActive('/billingpayments') 
+                                        isActive('/invoice') 
                                         ? 'bg-black text-white' 
                                         : 'text-gray-700 hover:bg-gray-100'
                                     }`}
                                 >
                                     <span className="mr-3"><FaFileInvoiceDollar /></span>
-                                    <span>Billing & Payments</span>
+                                    <span>Invoice</span>
                                 </Link>
                             </li>
                             <li>

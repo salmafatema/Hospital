@@ -333,8 +333,8 @@ const Doctors = () => {
                   <td className="px-6 py-4">
                     <button
                       onClick={() => deleteDoctor(doctor._id)}
-                      className="bg-black text-white px-3 py-1 rounded-md hover:bg-gray-700"
-                    >
+                      className="bg-black text-white px-4 py-2 rounded-md hover:text-black hover:bg-white hover:border hover:border-black transition"
+                      >
                       Delete
                     </button>
                   </td>

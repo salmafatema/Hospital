@@ -29,7 +29,7 @@ mongoose.connect('mongodb://localhost:27017/Hospital', {
 .catch((err) => console.log('MongoDB connection error:', err));
 
 app.use(appointmentRoutes); 
-app.use(patientRoutes);
+app.use('/patients', patientRoutes);
 app.use('/', doctorRoutes);
 
 app.listen(5000, () => {

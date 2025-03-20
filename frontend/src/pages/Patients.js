@@ -16,15 +16,17 @@ const Patients = () => {
   });
   const [isFormVisible, setFormVisible] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const [editingPatient, setEditingPatient] = useState(null);
 
   useEffect(() => {
-    fetchPatients();
+    fetchPatients();    
   }, []);
 
   const fetchPatients = async () => {
     try {
       const response = await axios.get('http://localhost:5000/patients');
       setPatients(Array.isArray(response.data) ? response.data : response.data.patients || []);
+    
     } catch (error) {
       console.error('Error fetching patients:', error);
       setPatients([]);
@@ -58,11 +60,36 @@ const Patients = () => {
     setNewPatient((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleEdit = (patient) => {
+    console.log(patient._id);
+    
+    setEditingPatient(patient);
+    setNewPatient({
+      fullName: patient.fullName,
+      age: patient.age,
+      gender: patient.gender,
+      phoneNumber: patient.phoneNumber,
+      admissionType: patient.admissionType,
+      bloodGroup: patient.bloodGroup,
+      time: patient.time,
+      date: patient.date.split('T')[0],
+    });
+    setFormVisible(true);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/patients', newPatient);
-      setSuccessMessage('Patient added successfully! ✅');
+      if (editingPatient) {
+        console.log('Updating patient with ID:', editingPatient._id);
+        console.log('Update data:', newPatient);
+        const response = await axios.put(`http://localhost:5000/patients/${editingPatient._id}`, newPatient);
+        console.log('Update response:', response.data);
+        setSuccessMessage('Patient updated successfully! ✅');
+      } else {
+        await axios.post('http://localhost:5000/patients', newPatient);
+        setSuccessMessage('Patient added successfully! ✅');
+      }
 
       fetchPatients();
       setNewPatient({
@@ -76,11 +103,13 @@ const Patients = () => {
         date: '',
       });
       setFormVisible(false);
+      setEditingPatient(null);
 
-      // Success message timeout
       setTimeout(() => setSuccessMessage(''), 3000);
     } catch (error) {
-      console.error('Error adding patient:', error);
+      console.error('Error saving patient:', error.response?.data || error.message);
+      setSuccessMessage(error.response?.data?.error || 'Error saving patient');
+      setTimeout(() => setSuccessMessage(''), 3000);
     }
   };
 
@@ -139,7 +168,9 @@ const Patients = () => {
       {isFormVisible && (
         <div className="fixed inset-0 backdrop-blur-sm bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-8 rounded-xl w-full max-w-2xl mx-auto shadow-2xl">
-            <h2 className="text-2xl font-semibold mb-6 text-gray-800">Add New Patient</h2>
+            <h2 className="text-2xl font-semibold mb-6 text-gray-800">
+              {editingPatient ? 'Edit Patient' : 'Add New Patient'}
+            </h2>
             <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Full Name</label>
@@ -259,7 +290,7 @@ const Patients = () => {
                   type="submit"
                   className="px-6 py-2 bg-black text-white rounded-lg hover:bg-gray-700 transition"
                 >
-                  Save Patient
+                  {editingPatient ? 'Update Patient' : 'Save Patient'}
                 </button>
               </div>
             </form>
@@ -304,12 +335,20 @@ const Patients = () => {
                   <td className="px-6 py-4 whitespace-nowrap">{patient.time}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{new Date(patient.date).toLocaleDateString()}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <button
-                      onClick={() => deletePatient(patient._id)}
-                      className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-700 transition"
-                    >
-                      Delete
-                    </button>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleEdit(patient)}
+                        className="bg-white text-black px-4 py-2 border border-black rounded-md hover:bg-black hover:text-white transition"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => deletePatient(patient._id)}
+                        className="bg-black text-white px-4 py-2 rounded-md hover:text-black hover:bg-white hover:border hover:border-black transition"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </td>
 
                 </tr>

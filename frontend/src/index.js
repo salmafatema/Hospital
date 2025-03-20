@@ -5,7 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import Patients from "./pages/Patients";
 import Appointments from "./pages/Appointments";
 import Doctors from "./pages/Doctors";
-import BillingPayments from "./pages/BillingPayments";
+import Invoice from "./pages/Invoice";
 import Pharmacy from "./pages/Pharmacy";
 import Laboratory from "./pages/Laboratory";
 import ICU_Emergency from "./pages/ICU_Emergency";
@@ -20,7 +20,7 @@ export default function App() {
         <Route path="patients" element={<Patients />} />
          <Route path="appointments" element={<Appointments />} />
          <Route path="doctors" element={<Doctors />} />
-         <Route path="billingpayments" element={<BillingPayments />} />
+         <Route path="invoice" element={<Invoice />} />
          <Route path="pharmacy" element={<Pharmacy />} />
          <Route path="laboratory" element={<Laboratory />} />
          <Route path="emergency" element={<ICU_Emergency />} />

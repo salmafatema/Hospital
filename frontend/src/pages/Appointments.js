@@ -3,11 +3,13 @@ import axios from 'axios';
 
 const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
+  const [doctors, setDoctors] = useState([]);
+  const [departments, setDepartments] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [newAppointment, setNewAppointment] = useState({
     patientName: '',
-    doctorName: 'Dr.Rajesh Sharma',
-    department: 'General Medicine',
+    doctorName: '',
+    department: '',
     date: '',
     time: '',
     status: 'Pending',
@@ -17,6 +19,7 @@ const Appointments = () => {
 
   useEffect(() => {
     fetchAppointments();
+    fetchDoctors();
   }, []);
 
   const fetchAppointments = async () => {
@@ -25,6 +28,18 @@ const Appointments = () => {
       setAppointments(response.data);
     } catch (error) {
       console.error('Error fetching appointments:', error);
+    }
+  };
+
+  const fetchDoctors = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/doctors');
+      setDoctors(response.data);
+      // Extract unique departments from doctors data
+      const uniqueDepartments = [...new Set(response.data.map(doctor => doctor.department))];
+      setDepartments(uniqueDepartments);
+    } catch (error) {
+      console.error('Error fetching doctors:', error);
     }
   };
 
@@ -55,8 +70,8 @@ const Appointments = () => {
       fetchAppointments();
       setNewAppointment({
         patientName: '',
-        doctorName: 'Dr.Rajesh Sharma',
-        department: 'General Medicine',
+        doctorName: '',
+        department: '',
         date: '',
         time: '',
         status: 'Pending',
@@ -154,12 +169,10 @@ const Appointments = () => {
                   required
                   className="w-full p-3 border rounded-md"
                 >
-                  <option value="Dr.Rajesh Sharma">Dr. Rajesh Sharma</option>
-                  <option value="Dr.Neha Verma">Dr. Neha Verma</option>
-                  <option value="Dr.Manish Gupta">Dr. Manish Gupta</option>
-                  <option value="Dr.Sanjay Patel">Dr. Sanjay Patel</option>
-                  <option value="Dr.Anisha Tiwari">Dr. Anisha Tiwari</option>
-                  <option value="Dr.Vinay Jain">Dr. Vinay Jain</option>
+                  <option value="">Select Doctor</option>
+                  {doctors.map(doctor => (
+                    <option key={doctor._id} value={doctor.name}>{doctor.name}</option>
+                  ))}
                 </select>
               </div>
               {/* Department Field */}
@@ -171,12 +184,10 @@ const Appointments = () => {
                   required
                   className="w-full p-3 border rounded-md"
                 >
-                  <option value="Cardiology">Cardiology</option>
-                  <option value="Orthopedics">Orthopedics</option>
-                  <option value="Neurology">Neurology</option>
-                  <option value="Pediatrics">Pediatrics</option>
-                  <option value="Dermatology">Dermatology</option>
-                  <option value="General Medicine">General Medicine</option>
+                  <option value="">Select Department</option>
+                  {departments.map(dept => (
+                    <option key={dept} value={dept}>{dept}</option>
+                  ))}
                 </select>
               </div>
 
@@ -270,8 +281,8 @@ const Appointments = () => {
                   <td className="px-6 py-4">
                     <button
                       onClick={() => deleteAppointment(appointment._id)}
-                      className="bg-black text-white px-3 py-1 rounded-md hover:bg-gray-700"
-                    >
+                      className="bg-black text-white px-4 py-2 rounded-md hover:text-black hover:bg-white hover:border hover:border-black transition"
+                      >
                       Delete
                     </button>
                   </td>
