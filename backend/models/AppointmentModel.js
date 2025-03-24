@@ -12,8 +12,6 @@ const appointmentSchema = new mongoose.Schema({
     },
     doctorName: {
         type: String,
-        enum: ['Dr.Rajesh Sharma', 'Dr.Neha Verma', 'Dr.Manish Gupta', 'Dr.Sanjay Patel', 'Dr.Anisha Tiwari', 'Dr.Vinay Jain'],
-        default: 'Dr.Rajesh Sharma',
         required: true,
     },
     department: {

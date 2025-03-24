@@ -64,23 +64,58 @@ const Appointments = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/appointments', newAppointment);
-      setSuccessMessage('Appointment added successfully! ✅');
+        // Generate a random appointment ID
+        const appointmentId = Math.floor(Math.random() * 10000);
+        
+        // Format the date to ISO string
+        const formattedDate = new Date(newAppointment.date).toISOString().split('T')[0];
+        
+        const appointmentData = {
+            appointmentId,
+            patientName: newAppointment.patientName,
+            doctorName: newAppointment.doctorName,
+            department: newAppointment.department,
+            date: formattedDate,
+            time: newAppointment.time,
+            status: newAppointment.status
+        };
 
-      fetchAppointments();
-      setNewAppointment({
-        patientName: '',
-        doctorName: '',
-        department: '',
-        date: '',
-        time: '',
-        status: 'Pending',
-      });
-      setFormVisible(false);
+        console.log('Sending appointment data:', appointmentData); // Debug log
 
-      setTimeout(() => setSuccessMessage(''), 3000);
+        const response = await axios.post('http://localhost:5000/appointments', appointmentData);
+        
+        if (response.status === 201) {
+            setSuccessMessage('Appointment added successfully! ✅');
+            fetchAppointments();
+            setNewAppointment({
+                patientName: '',
+                doctorName: '',
+                department: '',
+                date: '',
+                time: '',
+                status: 'Pending',
+            });
+            setFormVisible(false);
+            setTimeout(() => setSuccessMessage(''), 3000);
+        }
     } catch (error) {
-      console.error('Error adding appointment:', error);
+        console.error('Error adding appointment:', error);
+        if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.error('Error response data:', error.response.data);
+            const errorMessage = error.response.data.message || 'Error adding appointment';
+            setSuccessMessage(`Error: ${errorMessage} ❌`);
+        } else if (error.request) {
+            // The request was made but no response was received
+            console.error('No response received:', error.request);
+            setSuccessMessage('Error: No response from server ❌');
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            console.error('Error setting up request:', error.message);
+            setSuccessMessage(`Error: ${error.message} ❌`);
+        }
+        setTimeout(() => setSuccessMessage(''), 5000);
     }
   };
 
