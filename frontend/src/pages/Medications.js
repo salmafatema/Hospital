@@ -65,9 +65,17 @@ const Medications = () => {
           onClick={() => setFormVisible(true)}
           className="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition duration-300 ease-in-out flex items-center gap-2 shadow-md"
         >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+          </svg>
           Add New Medication
         </button>
         <div className="relative w-full max-w-4xl">
+          <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+            <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
+            </svg>
+          </div>
           <input
             type="text"
             placeholder="Search medications..."
@@ -75,6 +83,47 @@ const Medications = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
           />
+        </div>
+      </div>
+
+      {/* Status Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        {/* Expired Medications Card */}
+        <div className="bg-red-50 p-6 rounded-lg shadow-md border border-red-200">
+          <div className="flex items-center justify-between">
+            <h3 className="text-xl font-semibold text-red-700">Expired</h3>
+            <span className="text-2xl font-bold text-red-700">
+              {medications.filter(med => new Date(med.expiryDate) < new Date()).length}
+            </span>
+          </div>
+          <p className="text-red-600 mt-2">Medications past expiry date</p>
+        </div>
+
+        {/* Expiring Soon Card */}
+        <div className="bg-yellow-50 p-6 rounded-lg shadow-md border border-yellow-200">
+          <div className="flex items-center justify-between">
+            <h3 className="text-xl font-semibold text-yellow-700">Expiring Soon</h3>
+            <span className="text-2xl font-bold text-yellow-700">
+              {medications.filter(med => {
+                const expiryDate = new Date(med.expiryDate);
+                const thirtyDaysFromNow = new Date();
+                thirtyDaysFromNow.setDate(thirtyDaysFromNow.getDate() + 30);
+                return expiryDate > new Date() && expiryDate <= thirtyDaysFromNow;
+              }).length}
+            </span>
+          </div>
+          <p className="text-yellow-600 mt-2">Expiring within 30 days</p>
+        </div>
+
+        {/* Low Stock Card */}
+        <div className="bg-blue-50 p-6 rounded-lg shadow-md border border-blue-200">
+          <div className="flex items-center justify-between">
+            <h3 className="text-xl font-semibold text-blue-700">Low Stock</h3>
+            <span className="text-2xl font-bold text-blue-700">
+              {medications.filter(med => parseInt(med.quantity) < 10).length}
+            </span>
+          </div>
+          <p className="text-blue-600 mt-2">Items with quantity below 10</p>
         </div>
       </div>
 
@@ -109,9 +158,9 @@ const Medications = () => {
       {/* Modal for Add Medication Form */}
       {isFormVisible && (
         <div className="fixed inset-0 backdrop-blur-sm bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-8 rounded-xl w-full max-w-md mx-auto shadow-2xl">
+          <div className="bg-white p-8 rounded-xl w-full max-w-2xl mx-auto shadow-2xl">
             <h2 className="text-2xl font-semibold mb-6 text-gray-800">Add New Medication</h2>
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4">
+            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700">Medication Name</label>
                 <input

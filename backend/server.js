@@ -9,6 +9,7 @@ const path = require('path');
 const doctorRoutes = require('./routes/DoctorRoute');
 const invoiceRoutes = require('./routes/InvoiceRoute');
 const medicationRoutes = require('./routes/MedicationRoute');
+const laboratoryRoutes = require('./routes/LaboratoryRoute');
 
 
 
@@ -59,6 +60,7 @@ app.use('/patients', patientRoutes);
 app.use('/', doctorRoutes);
 app.use('/api', invoiceRoutes);
 app.use('/medications', medicationRoutes);
+app.use('/laboratory', laboratoryRoutes);
 
 
 
