@@ -39,4 +39,18 @@ router.post('/invoices', async (req, res) => {
     }
 });
 
+// DELETE invoice by ID
+router.delete('/invoices/:id', async (req, res) => {
+    try {
+        const deletedInvoice = await Invoice.findByIdAndDelete(req.params.id);
+        if (!deletedInvoice) {
+            return res.status(404).json({ message: 'Invoice not found' });
+        }
+        res.json({ message: 'Invoice deleted successfully', deletedInvoice });
+    } catch (error) {
+        console.error('Error deleting invoice:', error);
+        res.status(500).json({ message: 'Error deleting invoice', error: error.message });
+    }
+});
+
 module.exports = router;

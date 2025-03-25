@@ -16,6 +16,8 @@ const Invoice = () => {
     paymentMethod: 'Cash',
     paymentDate: ''
   });
+  const [selectedInvoice, setSelectedInvoice] = useState(null);
+  const [showTokenDetails, setShowTokenDetails] = useState(false);
 
   // GET route - Fetch invoices
   const fetchInvoices = async () => {
@@ -51,14 +53,17 @@ const Invoice = () => {
     }
   };
 
-  const handleEdit = (id) => {
-    console.log("Edit invoice:", id);
+  const handleDeleteInvoice = async (id) => {
+    if (window.confirm('Are you sure you want to delete this invoice?')) {
+    try {
+      await axios.delete(`http://localhost:5000/api/invoices/${id}`);
+      setInvoices(invoices.filter(invoice => invoice._id !== id));
+    } catch (error) {
+      console.error('Error deleting invoice:', error);
+    }
+  }
   };
 
-  const handleDelete = (id) => {
-    // Add delete functionality
-    console.log("Delete invoice:", id);
-  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -85,6 +90,15 @@ const Invoice = () => {
     } catch (error) {
       console.error('Error submitting form:', error);
     }
+  };
+
+  const handleGetToken = (invoice) => {
+    setSelectedInvoice(invoice);
+    setShowTokenDetails(true);
+  };
+
+  const handlePrint = () => {
+    window.print();
   };
 
   const filteredInvoices = invoices.filter(invoice =>
@@ -275,34 +289,105 @@ const Invoice = () => {
                   <td className="px-6 py-4 whitespace-nowrap">{invoice.invoiceId}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{invoice.patientName}</td>
                   <td className="px-6 py-4 whitespace-nowrap">${invoice.amount.toFixed(2)}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{invoice.date}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{invoice.dueDate}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {new Date(invoice.date).toLocaleDateString('en-GB')}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {new Date(invoice.dueDate).toLocaleDateString('en-GB')}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                      ${invoice.status === 'Paid' ? 'bg-green-100 text-green-800' : 
-                      invoice.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' : 
-                      'bg-red-100 text-red-800'}`}>
+          ${invoice.status === 'Paid' ? 'bg-green-100 text-green-800' :
+                        invoice.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
+                          'bg-red-100 text-red-800'}`}>
                       {invoice.status}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">{invoice.paymentMethod}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{invoice.paymentDate}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex gap-2">
+                    {invoice.paymentDate ? new Date(invoice.paymentDate).toLocaleDateString('en-GB') : 'N/A'}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex space-x-2">
                       <button
-                        onClick={() => handleEdit(invoice.invoiceId)}
-                        className="bg-white text-black px-4 py-2 border border-black rounded-md hover:bg-black hover:text-white transition"
+                        onClick={() => handleGetToken(invoice)}
+                        className="bg-red-400 text-white px-4 py-2 rounded-md hover:bg-red-300 transition"
                       >
-                        Edit
+                        Get Token
+                      </button>
+                      <button
+                        onClick={() => handleDeleteInvoice(invoice._id)}
+                        className="bg-black text-white px-4 py-2 rounded-md hover:text-black hover:bg-white hover:border hover:border-black transition"
+                      >
+                        Delete
                       </button>
                     </div>
                   </td>
                 </tr>
               ))}
             </tbody>
+
           </table>
         </div>
       </div>
+
+      {/* Token Details Modal */}
+      {showTokenDetails && selectedInvoice && (
+        <div className="fixed inset-0 backdrop-blur-sm bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-8 rounded-xl w-full max-w-2xl mx-auto shadow-2xl">
+            <div className="print:shadow-none">
+              <div className="text-center mb-6">
+                <h2 className="text-2xl font-bold">Invoice Token</h2>
+                <p className="text-gray-600">Token ID: {selectedInvoice.invoiceId}</p>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="font-semibold">Patient Name:</p>
+                    <p>{selectedInvoice.patientName}</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold">Amount:</p>
+                    <p>${selectedInvoice.amount.toFixed(2)}</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold">Date:</p>
+                    <p>{new Date(selectedInvoice.date).toLocaleDateString('en-GB')}</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold">Due Date:</p>
+                    <p>{new Date(selectedInvoice.dueDate).toLocaleDateString('en-GB')}</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold">Status:</p>
+                    <p>{selectedInvoice.status}</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold">Payment Method:</p>
+                    <p>{selectedInvoice.paymentMethod}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-4 mt-6 print:hidden">
+                <button
+                  onClick={() => setShowTokenDetails(false)}
+                  className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition"
+                >
+                  Close
+                </button>
+                <button
+                  onClick={handlePrint}
+                  className="px-6 py-2 bg-green-400 text-white rounded-lg hover:bg-green-200 transition"
+                >
+                  Print Token
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

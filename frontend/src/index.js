@@ -6,7 +6,7 @@ import Patients from "./pages/Patients";
 import Appointments from "./pages/Appointments";
 import Doctors from "./pages/Doctors";
 import Invoice from "./pages/Invoice";
-import Pharmacy from "./pages/Pharmacy";
+import Medications from './pages/Medications'; 
 import Laboratory from "./pages/Laboratory";
 import ICU_Emergency from "./pages/ICU_Emergency";
 import Reports from "./pages/Reports";
@@ -21,7 +21,7 @@ export default function App() {
          <Route path="appointments" element={<Appointments />} />
          <Route path="doctors" element={<Doctors />} />
          <Route path="invoice" element={<Invoice />} />
-         <Route path="pharmacy" element={<Pharmacy />} />
+         <Route path="medications" element={<Medications />} />
          <Route path="laboratory" element={<Laboratory />} />
          <Route path="emergency" element={<ICU_Emergency />} />
          <Route path="reports" element={<Reports />} />

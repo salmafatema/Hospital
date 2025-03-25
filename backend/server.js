@@ -8,6 +8,8 @@ const patientRoutes = require('./routes/PatientRoute');
 const path = require('path');
 const doctorRoutes = require('./routes/DoctorRoute');
 const invoiceRoutes = require('./routes/InvoiceRoute');
+const medicationRoutes = require('./routes/MedicationRoute');
+
 
 
 const app = express();
@@ -56,6 +58,9 @@ app.use('/', appointmentRoutes);
 app.use('/patients', patientRoutes);
 app.use('/', doctorRoutes);
 app.use('/api', invoiceRoutes);
+app.use('/medications', medicationRoutes);
+
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {
