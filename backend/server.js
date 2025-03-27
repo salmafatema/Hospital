@@ -2,9 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const PatientModel = require('./models/PatientModel'); 
+// const PatientModel = require('./models/PatientModel'); 
 const appointmentRoutes = require('./routes/AppointmentRoute'); 
-const patientRoutes = require('./routes/PatientRoute'); 
+const patientRoute = require('./routes/PatientRoute');
 const path = require('path');
 const doctorRoutes = require('./routes/DoctorRoute');
 const invoiceRoutes = require('./routes/InvoiceRoute');
@@ -26,7 +26,7 @@ app.use(cors({
 // Serve static files from uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// MongoDB Connection with detailed error handling
+// MongoDB Connection 
 mongoose.connect('mongodb://localhost:27017/Hospital', { 
     useNewUrlParser: true, 
     useUnifiedTopology: true 
@@ -55,8 +55,8 @@ mongoose.connection.on('disconnected', () => {
 });
 
 // Mount routes
-app.use('/', appointmentRoutes);
-app.use('/patients', patientRoutes);
+app.use('/api', appointmentRoutes);
+app.use('/api', patientRoute);
 app.use('/', doctorRoutes);
 app.use('/api', invoiceRoutes);
 app.use('/medications', medicationRoutes);

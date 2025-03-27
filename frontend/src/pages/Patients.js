@@ -24,7 +24,7 @@ const Patients = () => {
 
   const fetchPatients = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/patients');
+      const response = await axios.get('http://localhost:5000/api/patients');
       setPatients(Array.isArray(response.data) ? response.data : response.data.patients || []);
     
     } catch (error) {
@@ -38,7 +38,7 @@ const Patients = () => {
   const deletePatient = async (id) => {
     if (window.confirm('Are you sure you want to delete this patient?')) {
       try {
-        await axios.delete(`http://localhost:5000/patients/${id}`);
+        await axios.delete(`http://localhost:5000/api/patients/${id}`);
         setSuccessMessage('Patient deleted successfully! ✅');
         fetchPatients(); // Refresh patient list
         setTimeout(() => setSuccessMessage(''), 3000);
@@ -48,7 +48,7 @@ const Patients = () => {
     }
   };
 
-  // Add this new function to filter patients
+  // filter patients
   const filteredPatients = patients.filter((patient) =>
     patient.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
     patient.phoneNumber.includes(searchQuery) ||
@@ -83,13 +83,14 @@ const Patients = () => {
       if (editingPatient) {
         console.log('Updating patient with ID:', editingPatient._id);
         console.log('Update data:', newPatient);
-        const response = await axios.put(`http://localhost:5000/patients/${editingPatient._id}`, newPatient);
+        const response = await axios.put(`http://localhost:5000/api/patients/${editingPatient._id}`, newPatient);
         console.log('Update response:', response.data);
         setSuccessMessage('Patient updated successfully! ✅');
       } else {
-        await axios.post('http://localhost:5000/patients', newPatient);
+        await axios.post('http://localhost:5000/api/patients', newPatient);
         setSuccessMessage('Patient added successfully! ✅');
       }
+      
 
       fetchPatients();
       setNewPatient({
@@ -116,7 +117,7 @@ const Patients = () => {
 
   return (
     <div className="container mx-auto p-4 md:ml-64 mt-16">
-      {/* Add search bar and button in a column layout */}
+      {/*search bar and button */}
       <div className="flex flex-col items-center gap-6 my-6">
         <button
           onClick={() => setFormVisible(true)}
