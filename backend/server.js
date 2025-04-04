@@ -59,7 +59,7 @@ app.use('/api', appointmentRoutes);
 app.use('/api', patientRoute);
 app.use('/', doctorRoutes);
 app.use('/api', invoiceRoutes);
-app.use('/medications', medicationRoutes);
+app.use('/api', medicationRoutes);
 app.use('/laboratory', laboratoryRoutes);
 
 

@@ -24,7 +24,7 @@ const Appointments = () => {
 
   const fetchAppointments = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/appointments');
+      const response = await axios.get('http://localhost:5000/api/appointments');
       setAppointments(response.data);
     } catch (error) {
       console.error('Error fetching appointments:', error);
@@ -82,7 +82,7 @@ const Appointments = () => {
 
         console.log('Sending appointment data:', appointmentData); // Debug log
 
-        const response = await axios.post('http://localhost:5000/appointments', appointmentData);
+        const response = await axios.post('http://localhost:5000/api/appointments', appointmentData);
         
         if (response.status === 201) {
             setSuccessMessage('Appointment added successfully! ✅');

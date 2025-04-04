@@ -17,7 +17,7 @@ const Medications = () => {
   // Fetch medications from the backend
   const fetchMedications = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/medications');
+      const response = await axios.get('http://localhost:5000/api/medications');
       setMedications(response.data);
     } catch (error) {
       console.error('Error fetching medications:', error);
@@ -36,7 +36,7 @@ const Medications = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/medications', newMedication);
+      const response = await axios.post('http://localhost:5000/api/medications', newMedication);
       setMedications((prev) => [...prev, response.data]);
       setNewMedication({
         name: '',

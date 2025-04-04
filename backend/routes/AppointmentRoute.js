@@ -24,6 +24,7 @@ router.get('/appointments', async (req, res) => {
     }
 });
 
+
 // POST new appointment
 router.post('/appointments', async (req, res) => {
     try {
@@ -134,27 +135,22 @@ router.post('/appointments', async (req, res) => {
 
 // DELETE
 router.delete('/appointments/:id', async (req, res) => {
-    const { id } = req.params;
-    
-    try {
-        // Check MongoDB connection
-        if (mongoose.connection.readyState !== 1) {
-            console.error('MongoDB is not connected');
-            return res.status(500).json({ message: 'Database connection error' });
-        }
+    console.log("Delete Request Received for ID:", req.params.id);
 
-        const deletedAppointment = await AppointmentModel.findByIdAndDelete(id);
+    try {
+        const { id } = req.params;
+        const deletedAppointment = await Appointment.findByIdAndDelete(id);
 
         if (!deletedAppointment) {
-            return res.status(404).json({ message: 'Appointment not found' });
+            return res.status(404).json({ message: "Appointment not found" });
         }
 
-        res.status(200).json({ message: 'Appointment deleted successfully' });
+        res.json({ message: "Appointment deleted successfully" });
     } catch (error) {
-        console.error('Error deleting appointment:', error);
-        res.status(500).json({ message: 'Error deleting appointment', error });
+        res.status(500).json({ message: "Server Error", error: error.message });
     }
 });
+
 
 
 module.exports = router;
