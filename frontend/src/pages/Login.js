@@ -6,28 +6,20 @@ const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
-    const [successMessage, setSuccessMessage] = useState("");
+    // const [successMessage, setSuccessMessage] = useState("");
 
     const navigate = useNavigate();
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
-
-        axios.post("http://localhost:5000/api/login", { email, password })
-            .then((res) => {
-                if (res.data === "Login success") {
-                    setSuccessMessage("Login successfully ✅");
-                    setTimeout(() => {
-                        navigate("/");
-                    }, 2000);
-                } else {
-                    setErrorMessage(res.data);
-                }
-            })
-            .catch((err) => {
-                console.error("Login error:", err);
-                setErrorMessage("Something went wrong");
-            });
+        try {
+            const res = await axios.post("http://localhost:5000/api/login", { email, password });
+            if (res.status === 200) {
+                navigate("/");
+            }
+        } catch (err) {
+            setErrorMessage(err.response?.data?.message || "Login failed");
+        }
     };
 
     return (

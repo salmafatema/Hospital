@@ -10,24 +10,24 @@ const Signup = () => {
 
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-
-        axios.post("http://localhost:5000/api/signup", { name, email, password })
-            .then((res) => {
-                if (res.data === "Account created") {
-                    setSuccessMessage("Registered successfully ✅");
-                    setTimeout(() => {
-                        navigate("/");
-                    }, 2000);
-                } else {
-                    alert(res.data);
-                }
-            })
-            .catch((err) => {
-                console.error("Signup error:", err);
-                alert("Signup failed");
+        console.log("Signup data:", { name, email, password }); // 👈 Add this
+    
+        try {
+            const response = await axios.post("http://localhost:5000/api/signup", {
+                name,
+                email,
+                password,
             });
+            if (response.status === 201) {
+                setSuccessMessage("Signup successfull")
+                navigate("/");
+              }
+        } catch (err) {
+            console.error("Signup error (frontend):", err); // 👈 Add this
+            alert("Signup failed");
+        }
     };
 
     return (

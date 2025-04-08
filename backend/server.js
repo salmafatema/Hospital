@@ -10,10 +10,7 @@ const doctorRoutes = require('./routes/DoctorRoute');
 const invoiceRoutes = require('./routes/InvoiceRoute');
 const medicationRoutes = require('./routes/MedicationRoute');
 const laboratoryRoutes = require('./routes/LaboratoryRoute'); 
-const RegisterModel = require('./models/Register');
-const UserModel = require('./models/User');
-
-
+const authRoutes = require("./routes/AuthRoute");
 
 const app = express();
 
@@ -47,41 +44,41 @@ mongoose.connection.on('disconnected', () => {
 });
 
 
-// SIGNUP (Secure version)
-app.post('/api/signup', async (req, res) => {
-    const { name, email, password } = req.body;
+// // SIGNUP (Secure version)
+// app.post('/api/signup', async (req, res) => {
+//     const { name, email, password } = req.body;
 
-    try {
-        const existingUser = await UserModel.findOne({ email });
-        if (existingUser) return res.json("Already have an account");
+//     try {
+//         const existingUser = await RegisterModel.findOne({ email });
+//         if (existingUser) return res.json("Already have an account");
 
-        const hashedPassword = await bcrypt.hash(password, 10);
-        await UserModel.create({ name, email, password: hashedPassword });
+//         const hashedPassword = await bcrypt.hash(password, 10);
+//         await RegisterModel.create({ name, email, password: hashedPassword });
 
-        res.json("Account created");
-    } catch (err) {
-        console.error("Signup error:", err);
-        res.status(500).json("Signup failed");
-    }
-});
+//         res.json("Account created");
+//     } catch (err) {
+//         console.error("Signup error:", err);
+//         res.status(500).json("Signup failed");
+//     }
+// });
 
-// LOGIN (Secure version)
-app.post("/api/login", async (req, res) => {
-    const { email, password } = req.body;
+// // LOGIN (Secure version)
+// app.post("/api/login", async (req, res) => {
+//     const { email, password } = req.body;
 
-    try {
-        const user = await UserModel.findOne({ email });
-        if (!user) return res.json("No user found");
+//     try {
+//         const user = await UserModel.findOne({ email });
+//         if (!user) return res.json("No user found");
 
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.json("Incorrect password");
+//         const isMatch = await bcrypt.compare(password, user.password);
+//         if (!isMatch) return res.json("Incorrect password");
 
-        res.json("Login success");
-    } catch (err) {
-        console.error("Login error:", err);
-        res.status(500).json("Login failed");
-    }
-});
+//         res.json("Login success");
+//     } catch (err) {
+//         console.error("Login error:", err);
+//         res.status(500).json("Login failed");
+//     }
+// });
 
 
 // Mount routes
@@ -91,6 +88,7 @@ app.use('/', doctorRoutes);
 app.use('/api', invoiceRoutes);
 app.use('/api', medicationRoutes);
 app.use('/laboratory', laboratoryRoutes);
+app.use("/api", authRoutes);
 
 
 
