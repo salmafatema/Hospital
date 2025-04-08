@@ -27,7 +27,7 @@ function Reports() {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
   const [isLoading, setIsLoading] = useState(false);
   
-  // Sample hospital data - replace with actual API call
+  // Sample hospital data
   const tableData = [
     {
       patientId: "P001",

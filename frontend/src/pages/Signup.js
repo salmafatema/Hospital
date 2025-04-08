@@ -6,13 +6,13 @@ const Signup = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [successMessage, setSuccessMessage] = useState(""); // ✅ New state
+    const [successMessage, setSuccessMessage] = useState("");
 
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Signup data:", { name, email, password }); // 👈 Add this
+        console.log("Signup data:", { name, email, password }); 
     
         try {
             const response = await axios.post("http://localhost:5000/api/signup", {
@@ -25,7 +25,7 @@ const Signup = () => {
                 navigate("/");
               }
         } catch (err) {
-            console.error("Signup error (frontend):", err); // 👈 Add this
+            console.error("Signup error (frontend):", err); 
             alert("Signup failed");
         }
     };
@@ -76,12 +76,12 @@ const Signup = () => {
 
                 <button
                     type="submit"
-                    className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+                    className="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-700 transition"
                 >
                     Sign Up
                 </button>
 
-                {/* ✅ Success Message */}
+                {/* Success Message */}
                 {successMessage && (
                     <p className="mt-4 text-green-600 text-center font-medium">
                         {successMessage}
@@ -93,7 +93,7 @@ const Signup = () => {
                     <button
                         type="button"
                         onClick={() => navigate("/login")}
-                        className="text-blue-600 hover:underline"
+                        className="text-black hover:underline"
                     >
                         Log In
                     </button>

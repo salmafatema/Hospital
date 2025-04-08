@@ -22,7 +22,7 @@ router.post("/signup", async (req, res) => {
         await user.save();
         res.status(201).json({ message: "User created successfully" });
     } catch (err) {
-        console.error("Signup error:", err); // 👈 Yeh output please paste karo
+        console.error("Signup error:", err); 
         res.status(500).json({ message: "Server error" });
     }
 });
@@ -43,7 +43,6 @@ router.post("/login", async (req, res) => {
         return res.status(401).json({ message: "Invalid password" });
       }
   
-      // If everything is good
       res.status(200).json({ message: "Login successful", user });
     } catch (error) {
       console.error("Login error:", error);

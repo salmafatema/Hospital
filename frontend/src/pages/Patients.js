@@ -40,7 +40,7 @@ const Patients = () => {
       try {
         await axios.delete(`http://localhost:5000/api/patients/${id}`);
         setSuccessMessage('Patient deleted successfully! ✅');
-        fetchPatients(); // Refresh patient list
+        fetchPatients(); 
         setTimeout(() => setSuccessMessage(''), 3000);
       } catch (error) {
         console.error('Error deleting patient:', error);

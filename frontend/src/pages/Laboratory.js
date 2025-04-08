@@ -16,7 +16,7 @@ const Laboratory = () => {
     referenceRanges: null
   });
 
-  // Fetch tests from backend
+  // Fetch 
   useEffect(() => {
     fetchTests();
   }, []);

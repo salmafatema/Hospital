@@ -1,9 +1,18 @@
 import React, { useState } from 'react';
-import {    FaUser } from 'react-icons/fa';
+import { FaUser } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom'; 
 import Sidebar from './Sidebar';
 
 const Topbar = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        localStorage.removeItem('token'); 
+
+        // Redirect to login page
+        navigate('/login');
+    };
 
     return (
         <div className="fixed top-0 right-0 w-full md:w-[calc(100%-16rem)] bg-white p-4 z-30">
@@ -25,7 +34,7 @@ const Topbar = () => {
                                 My Profile
                             </a>
                             <button 
-                                onClick={() => {/* Add logout logic here */}}
+                                onClick={handleLogout}
                                 className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
                             >
                                 Logout

@@ -6,7 +6,7 @@ const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
-    // const [successMessage, setSuccessMessage] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
 
     const navigate = useNavigate();
 
@@ -56,7 +56,7 @@ const Login = () => {
 
                 <button
                     type="submit"
-                    className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+                    className="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-700 transition"
                 >
                     Log In
                 </button>
@@ -67,7 +67,7 @@ const Login = () => {
 
                 <div className="text-center mt-4">
                     <p>Don’t have an account?</p>
-                    <a href="/signup" className="text-blue-600 hover:underline">Sign Up</a>
+                    <a href="/signup" className="text-black hover:underline">Sign Up</a>
                 </div>
             </form>
         </div>

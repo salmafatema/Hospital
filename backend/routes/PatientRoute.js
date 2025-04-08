@@ -28,7 +28,7 @@ router.get('/patients', async (req, res) => {
 router.delete('/patients/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        console.log("Deleting patient with ID:", id); // Debugging log
+        console.log("Deleting patient with ID:", id); 
 
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({ error: 'Invalid patient ID format' });
